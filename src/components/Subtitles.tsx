@@ -33,15 +33,11 @@ export default function Subtitles({ file, onJumpToSubtitle }: IProps) {
             {subtitles.map((subtitle) => (
               <li
                 key={subtitle.start}
-                className="bg-foreground rounded-lg text-background data-[highlighted=true]:bg-blue-500 data-[highlighted=true]:text-foreground cursor-pointer"
+                className="px-4 py-2 bg-foreground rounded-lg text-background data-[highlighted=true]:bg-blue-500 data-[highlighted=true]:text-foreground cursor-pointer"
                 data-highlighted={subtitle.isHighlighted}
+                onClick={() => handleSubtitleClick(subtitle)}
               >
-                <button
-                  className="px-4 py-2 text-start"
-                  onClick={() => handleSubtitleClick(subtitle)}
-                >
-                  {formatTime(srtTimeToSeconds(subtitle.start))} {subtitle.text}
-                </button>
+                {formatTime(srtTimeToSeconds(subtitle.start))} {subtitle.text}
               </li>
             ))}
           </ul>
