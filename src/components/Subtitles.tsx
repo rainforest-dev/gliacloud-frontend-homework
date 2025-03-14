@@ -1,12 +1,15 @@
 import useSWR from "swr";
 import { subtitlesFetcher } from "@/data";
 import { useEffect } from "react";
+import { formatTime, srtTimeToSeconds } from "@/utils";
+import type { ISubtitle } from "@/types";
 
 interface IProps {
+  onJumpToSubtitle: (time: number) => void;
   file: File;
 }
 
-export default function Subtitles({ file }: IProps) {
+export default function Subtitles({ file, onJumpToSubtitle }: IProps) {
   const { data, mutate } = useSWR(file, subtitlesFetcher);
 
   useEffect(() => {
@@ -15,7 +18,9 @@ export default function Subtitles({ file }: IProps) {
     }
   }, [file, mutate]);
 
-  console.log(data);
+  const handleSubtitleClick = (subtitle: ISubtitle) => {
+    onJumpToSubtitle(srtTimeToSeconds(subtitle.start));
+  };
 
   return (
     <div className="flex flex-col overflow-y-scroll gap-8 px-10">
@@ -28,14 +33,14 @@ export default function Subtitles({ file }: IProps) {
             {subtitles.map((subtitle) => (
               <li
                 key={subtitle.start}
-                className="bg-foreground rounded-lg text-background data-[highlighted=true]:bg-cyan-500 cursor-pointer"
+                className="bg-foreground rounded-lg text-background data-[highlighted=true]:bg-blue-500 data-[highlighted=true]:text-foreground cursor-pointer"
                 data-highlighted={subtitle.isHighlighted}
               >
                 <button
-                  className="px-4 py-2"
-                  onClick={() => console.log(subtitle)}
+                  className="px-4 py-2 text-start"
+                  onClick={() => handleSubtitleClick(subtitle)}
                 >
-                  {subtitle.start} ~ {subtitle.end} {subtitle.text}
+                  {formatTime(srtTimeToSeconds(subtitle.start))} {subtitle.text}
                 </button>
               </li>
             ))}

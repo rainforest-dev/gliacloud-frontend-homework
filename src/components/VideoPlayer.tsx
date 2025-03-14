@@ -2,40 +2,56 @@ import { useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 
+export type PlayerType = ReturnType<typeof videojs>;
+
 interface IProps {
   src: string;
   type: string;
+  onReady?: (player: PlayerType) => void;
 }
 
-export default function VideoPlayer({ src, type }: IProps) {
-  const ref = useRef<HTMLVideoElement>(null);
+export default function VideoPlayer({ src, type, onReady }: IProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<PlayerType | null>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
-    // const player = videojs(ref.current, {
-    //   controls: true,
-    //   autoplay: true,
-    //   preload: "auto",
-    // });
-    // return () => {
-    //   player.dispose();
-    // };
-  }, []);
+    if (!playerRef.current) {
+      const videoElement = document.createElement("video-js");
+
+      videoElement.classList.add("vjs-big-play-centered", "size-full");
+      ref.current?.appendChild(videoElement);
+
+      const player = (playerRef.current = videojs(
+        videoElement,
+        {
+          controls: true,
+          autoplay: true,
+          preload: "auto",
+          sources: [
+            {
+              src,
+              type,
+            },
+          ],
+        },
+        () => {
+          videojs.log("player ready");
+          onReady?.(player);
+        }
+      ));
+    } else {
+      const player = playerRef.current;
+      player.autoplay(true);
+      player.src({
+        src,
+        type,
+      });
+    }
+  }, [onReady, src, type]);
 
   return (
-    <video ref={ref} className="video-js vjs-theme-city ">
-      <source src={src} type={type} />
-      <track
-        kind="captions"
-        src="/demo.vtt"
-        srcLang="en"
-        label="English"
-        default
-      />
-      <p>
-        Your browser doesn&apos;t support HTML5 video. Here is a{" "}
-        <a href={src}>link to the video</a> instead.
-      </p>
-    </video>
+    <div data-vjs-player className="size-full">
+      <div ref={ref}></div>
+    </div>
   );
 }
