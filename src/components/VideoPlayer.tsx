@@ -7,9 +7,10 @@ interface IProps {
   src: string;
   type: string;
   onReady?: (player: PlayerType) => void;
+  onUpdate?: VoidFunction;
 }
 
-export default function VideoPlayer({ src, type, onReady }: IProps) {
+export default function VideoPlayer({ src, type, onReady, onUpdate }: IProps) {
   const ref = useRef<HTMLDivElement>(null);
   const playerRef = useRef<PlayerType | null>(null);
 
@@ -20,7 +21,7 @@ export default function VideoPlayer({ src, type, onReady }: IProps) {
       videoElement.classList.add("vjs-big-play-centered", "size-full");
       ref.current?.appendChild(videoElement);
 
-      const player = (playerRef.current = videojs(
+      const player = videojs(
         videoElement,
         {
           controls: true,
@@ -39,7 +40,8 @@ export default function VideoPlayer({ src, type, onReady }: IProps) {
           videojs.log("player ready");
           onReady?.(player);
         }
-      ));
+      );
+      playerRef.current = player;
     } else {
       const player = playerRef.current;
       player.autoplay(true);
@@ -47,12 +49,7 @@ export default function VideoPlayer({ src, type, onReady }: IProps) {
         src,
         type,
       });
-      player.addRemoteTextTrack({
-        kind: "subtitles",
-        src: "/demo.vtt",
-        srclang: "en",
-        label: "English",
-      });
+      onUpdate?.();
     }
   }, [src, type]);
 

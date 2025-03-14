@@ -17,7 +17,7 @@ export const POST = async () => {
         .slice(index * n, Math.min(subtitles.length, (index + 1) * n))
         .map((subtitle) => ({
           ...subtitle,
-          isHighlighted: Math.random() > 0.8,
+          isHighlighted: Math.random() > 0.9,
         })),
     }))
   );

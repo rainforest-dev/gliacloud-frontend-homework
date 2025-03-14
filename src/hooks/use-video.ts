@@ -2,6 +2,9 @@ import type { PlayerType } from "@/types";
 import { useRef, useState } from "react";
 import videojs from "video.js";
 import { throttle } from "lodash-es";
+import Marker from "@/components/Marker";
+
+videojs.registerComponent("Marker", Marker);
 
 export default function useVideo() {
   const [current, setCurrent] = useState<number>(0);
@@ -45,11 +48,37 @@ export default function useVideo() {
     }
   };
 
+  const addHighlight = (start: number, end: number, text: string) => {
+    if (playerRef.current) {
+      const controlBar = playerRef.current.getChild("ControlBar");
+      const progressControl = controlBar?.getChild("ProgressControl");
+      if (progressControl) {
+        progressControl.addChild("Marker", { start, end, text });
+      }
+    }
+  };
+
+  const clearHighlights = () => {
+    if (playerRef.current) {
+      const controlBar = playerRef.current.getChild("ControlBar");
+      const progressControl = controlBar?.getChild("ProgressControl");
+      if (progressControl) {
+        progressControl.children().forEach((child) => {
+          if (child instanceof Marker) {
+            progressControl.removeChild(child);
+          }
+        });
+      }
+    }
+  };
+
   return {
     playerRef,
     current,
     handlePlayerReady,
     handlePlayerSetup,
     handleJumpToSubtitle,
+    addHighlight,
+    clearHighlights,
   };
 }
