@@ -1,8 +1,7 @@
+import type { PlayerType } from "@/types";
 import { useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
-
-export type PlayerType = ReturnType<typeof videojs>;
 
 interface IProps {
   src: string;
@@ -27,6 +26,8 @@ export default function VideoPlayer({ src, type, onReady }: IProps) {
           controls: true,
           autoplay: true,
           preload: "auto",
+          responsive: true,
+          fill: true,
           sources: [
             {
               src,
@@ -46,12 +47,14 @@ export default function VideoPlayer({ src, type, onReady }: IProps) {
         src,
         type,
       });
+      player.addRemoteTextTrack({
+        kind: "subtitles",
+        src: "/demo.vtt",
+        srclang: "en",
+        label: "English",
+      });
     }
-  }, [onReady, src, type]);
+  }, [src, type]);
 
-  return (
-    <div data-vjs-player className="size-full">
-      <div ref={ref}></div>
-    </div>
-  );
+  return <div ref={ref} data-vjs-player className="size-full"></div>;
 }
