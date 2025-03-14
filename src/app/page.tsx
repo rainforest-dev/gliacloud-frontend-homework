@@ -21,6 +21,7 @@ export default function Home() {
     handlePlayerSetup,
     addHighlight,
     clearHighlights,
+    pause,
   } = useVideo();
   const [videoSrc, videoType] = useMemo(() => {
     if (!file) {
@@ -33,21 +34,18 @@ export default function Home() {
     if (file) {
       mutate();
     }
-  }, [file]);
+  }, [file, mutate]);
 
   useEffect(() => {
     if (data) {
       clearHighlights();
-      let highlighted = 0;
       data.forEach((section) => {
         section.subtitles.forEach(({ start, end, text, isHighlighted }) => {
           if (isHighlighted) {
             addHighlight(srtTimeToSeconds(start), srtTimeToSeconds(end), text);
-            highlighted++;
           }
         });
       });
-      console.log(`Highlighted ${highlighted} subtitles`);
     }
   }, [data]);
 
@@ -67,6 +65,7 @@ export default function Home() {
               current={current}
               sections={data}
               onJumpToSubtitle={handleJumpToSubtitle}
+              onPause={pause}
             ></Subtitles>
           )}
           <VideoPlayer

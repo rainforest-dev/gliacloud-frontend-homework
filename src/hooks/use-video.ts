@@ -45,6 +45,7 @@ export default function useVideo() {
   const handleJumpToSubtitle = (time: number) => {
     if (playerRef.current) {
       playerRef.current.currentTime(time);
+      playerRef.current.play();
     }
   };
 
@@ -72,6 +73,12 @@ export default function useVideo() {
     }
   };
 
+  const pause = () => {
+    if (playerRef.current) {
+      playerRef.current.pause();
+    }
+  };
+
   return {
     playerRef,
     current,
@@ -80,5 +87,6 @@ export default function useVideo() {
     handleJumpToSubtitle,
     addHighlight,
     clearHighlights,
+    pause,
   };
 }

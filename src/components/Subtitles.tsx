@@ -6,6 +6,7 @@ interface IProps {
   current: number;
   sections?: ISectionSubtitles[];
   onJumpToSubtitle: (time: number) => void;
+  onPause?: () => void;
 }
 
 const Subtitle = ({
@@ -50,13 +51,21 @@ export default function Subtitles({
   current,
   sections = [],
   onJumpToSubtitle,
+  onPause,
 }: IProps) {
+  const handleScroll = () => {
+    onPause?.();
+  };
+
   const handleSubtitleClick = (subtitle: ISubtitle) => {
     onJumpToSubtitle(srtTimeToSeconds(subtitle.start));
   };
 
   return (
-    <div className="flex flex-col overflow-y-scroll gap-8 px-10">
+    <div
+      className="flex flex-col overflow-y-scroll gap-8 px-10"
+      onWheel={handleScroll}
+    >
       {sections.map(({ section, subtitles }) => (
         <section key={section} className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold capitalize sticky top-0 bg-gradient-to-b from-background to-transparent">
