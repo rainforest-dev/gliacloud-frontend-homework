@@ -2,9 +2,9 @@ import type { PlayerType } from "@/types";
 import { useRef, useState } from "react";
 import videojs from "video.js";
 import { throttle } from "lodash-es";
-import Marker from "@/components/Marker";
+import Marker, { type ComponentType } from "@/components/Marker";
 
-videojs.registerComponent("Marker", Marker);
+videojs.registerComponent("Marker", Marker as ComponentType);
 
 export default function useVideo() {
   const [current, setCurrent] = useState<number>(0);

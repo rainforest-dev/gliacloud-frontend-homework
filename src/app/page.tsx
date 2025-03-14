@@ -9,9 +9,12 @@ import useSWR from "swr";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
-  const { data, mutate } = useSWR(file, subtitlesFetcher);
+  const { data, mutate } = useSWR(file, subtitlesFetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+  });
   const {
-    playerRef,
     current,
     handlePlayerReady,
     handleJumpToSubtitle,
@@ -30,18 +33,21 @@ export default function Home() {
     if (file) {
       mutate();
     }
-  }, [file, mutate]);
+  }, [file]);
 
   useEffect(() => {
     if (data) {
       clearHighlights();
+      let highlighted = 0;
       data.forEach((section) => {
         section.subtitles.forEach(({ start, end, text, isHighlighted }) => {
           if (isHighlighted) {
             addHighlight(srtTimeToSeconds(start), srtTimeToSeconds(end), text);
+            highlighted++;
           }
         });
       });
+      console.log(`Highlighted ${highlighted} subtitles`);
     }
   }, [data]);
 

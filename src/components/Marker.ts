@@ -2,6 +2,7 @@ import { PlayerType } from "@/types";
 import videojs from "video.js";
 
 const Component = videojs.getComponent("Component");
+export type ComponentType = typeof Component;
 
 class Marker extends Component {
   constructor(
