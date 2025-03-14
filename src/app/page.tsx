@@ -50,7 +50,7 @@ export default function Home() {
   }, [data]);
 
   return (
-    <main className="container mx-auto size-full pt-40">
+    <main className="container mx-auto size-full pt-40 pb-56">
       {!file && (
         <VideoUpload
           onChange={setFile}
@@ -59,7 +59,7 @@ export default function Home() {
         ></VideoUpload>
       )}
       {videoSrc && videoType && (
-        <div className="flex h-[50vh] overflow-hidden *:w-1/2">
+        <div className="flex h-full *:w-1/2">
           {file && (
             <Subtitles
               current={current}
@@ -68,12 +68,14 @@ export default function Home() {
               onPause={pause}
             ></Subtitles>
           )}
-          <VideoPlayer
-            src={videoSrc}
-            type={videoType}
-            onReady={handlePlayerReady}
-            onUpdate={handlePlayerSetup}
-          ></VideoPlayer>
+          <div className="flex-1 sticky top-1/2 -translate-y-1/2 aspect-video h-fit">
+            <VideoPlayer
+              src={videoSrc}
+              type={videoType}
+              onReady={handlePlayerReady}
+              onUpdate={handlePlayerSetup}
+            ></VideoPlayer>
+          </div>
         </div>
       )}
     </main>

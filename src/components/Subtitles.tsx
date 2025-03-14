@@ -35,9 +35,9 @@ const Subtitle = ({
   return (
     <li
       ref={ref}
-      className="px-4 py-2 bg-foreground rounded-lg text-background cursor-pointer
-                data-[highlighted=true]:bg-blue-500 data-[highlighted=true]:text-foreground
-                data-[current=true]:bg-red-500! data-[current=true]:text-foreground data-[current=true]:scale-y-110"
+      className="px-4 py-2 bg-background-higher rounded-lg text-foreground cursor-pointer shadow
+                data-[highlighted=true]:bg-primary data-[highlighted=true]:text-on-primary
+                data-[current=true]:outline-2 data-[current=true]:outline-offset-1 data-[current=true]:outline-rose-500"
       data-highlighted={subtitle.isHighlighted}
       data-current={isCurrent}
       onClick={onClick}
@@ -62,13 +62,10 @@ export default function Subtitles({
   };
 
   return (
-    <div
-      className="flex flex-col overflow-y-scroll gap-8 px-10"
-      onWheel={handleScroll}
-    >
+    <div className="flex flex-col px-10" onWheel={handleScroll}>
       {sections.map(({ section, subtitles }) => (
-        <section key={section} className="flex flex-col gap-4">
-          <h2 className="text-2xl font-bold capitalize sticky top-0 bg-gradient-to-b from-background to-transparent">
+        <section key={section} className="flex flex-col">
+          <h2 className="pb-4 pt-10 text-2xl font-bold capitalize sticky top-0 bg-gradient-to-b from-background via-background/80 to-transparent">
             {section}
           </h2>
           <ul className="flex flex-col gap-2">

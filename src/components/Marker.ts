@@ -22,7 +22,7 @@ class Marker extends Component {
   createEl() {
     return videojs.dom.createEl("div", {
       className:
-        "vjs-marker h-2 min-w-2 rounded-full bg-blue-500 absolute hover:h-4 origin-center transition-all",
+        "vjs-marker h-2 min-w-2 rounded-full bg-primary text-on-primary absolute hover:h-4 origin-center transition-all",
     });
   }
 
