@@ -64,6 +64,20 @@ export default function useVideo() {
     }
   };
 
+  const removeHighlight = (start: number) => {
+    if (playerRef.current) {
+      const controlBar = playerRef.current.getChild("ControlBar");
+      const progressControl = controlBar?.getChild("ProgressControl");
+      if (progressControl) {
+        progressControl.children().forEach((child) => {
+          if (child instanceof Marker && child.options_.start === start) {
+            progressControl.removeChild(child);
+          }
+        });
+      }
+    }
+  };
+
   const clearHighlights = () => {
     if (playerRef.current) {
       const controlBar = playerRef.current.getChild("ControlBar");
@@ -92,6 +106,7 @@ export default function useVideo() {
     handlePlayerSetup,
     handleJumpToSubtitle,
     addHighlight,
+    removeHighlight,
     clearHighlights,
     pause,
   };

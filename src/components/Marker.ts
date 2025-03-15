@@ -7,9 +7,12 @@ export type ComponentType = typeof Component;
 class Marker extends Component {
   constructor(
     player: PlayerType,
-    options: { start: number; end: number; text: string }
+    options: { start: number; end: number; text: string } & {
+      children?: never;
+      className?: never;
+    }
   ) {
-    super(player, {});
+    super(player, options);
 
     this.updateTime(
       options.start,

@@ -7,16 +7,19 @@ interface IProps {
   sections?: ISectionSubtitles[];
   onJumpToSubtitle: (time: number) => void;
   onPause?: () => void;
+  onSelectSubtitle?: (subtitle: ISubtitle) => void;
 }
 
 const Subtitle = ({
   subtitle,
   current,
   onClick,
+  onSelect,
 }: {
   subtitle: ISubtitle;
   current: number;
   onClick: () => void;
+  onSelect?: (subtitle: ISubtitle) => void;
 }) => {
   const ref = useRef<HTMLLIElement>(null);
   const isCurrent =
@@ -35,14 +38,26 @@ const Subtitle = ({
   return (
     <li
       ref={ref}
-      className="px-4 py-2 bg-background-higher rounded-lg text-foreground cursor-pointer shadow
+      className="bg-background-higher rounded-lg text-foreground shadow flex
                 data-[highlighted=true]:bg-primary data-[highlighted=true]:text-on-primary
                 data-[current=true]:outline-2 data-[current=true]:outline-offset-1 data-[current=true]:outline-rose-500"
       data-highlighted={subtitle.isHighlighted}
       data-current={isCurrent}
-      onClick={onClick}
     >
-      {formatTime(srtTimeToSeconds(subtitle.start))} {subtitle.text}
+      <button
+        className="text-left pl-4 pr-2 py-2 cursor-pointer 
+                    hover:bg-primary/50 hover:backdrop-brightness-110 hover:rounded-[inherit]"
+        onClick={onClick}
+      >
+        {formatTime(srtTimeToSeconds(subtitle.start))}
+      </button>
+      <button
+        className="text-left pr-4 pl-2 py-2 grow cursor-pointer 
+                    hover:bg-primary/50 hover:backdrop-brightness-110 hover:rounded-[inherit]"
+        onClick={() => onSelect?.(subtitle)}
+      >
+        {subtitle.text}
+      </button>
     </li>
   );
 };
@@ -52,6 +67,7 @@ export default function Subtitles({
   sections = [],
   onJumpToSubtitle,
   onPause,
+  onSelectSubtitle,
 }: IProps) {
   const handleScroll = () => {
     onPause?.();
@@ -75,6 +91,7 @@ export default function Subtitles({
                 subtitle={subtitle}
                 current={current}
                 onClick={() => handleSubtitleClick(subtitle)}
+                onSelect={onSelectSubtitle}
               />
             ))}
           </ul>

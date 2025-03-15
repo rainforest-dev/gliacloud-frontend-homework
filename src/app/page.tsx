@@ -3,6 +3,7 @@
 import { Subtitles, Timeline, VideoPlayer, VideoUpload } from "@/components";
 import { subtitlesFetcher } from "@/data";
 import useVideo from "@/hooks/use-video";
+import type { ISubtitle } from "@/types";
 import { srtTimeToSeconds } from "@/utils";
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
@@ -21,6 +22,7 @@ export default function Home() {
     handleJumpToSubtitle,
     handlePlayerSetup,
     addHighlight,
+    removeHighlight,
     clearHighlights,
     pause,
   } = useVideo();
@@ -30,6 +32,37 @@ export default function Home() {
     }
     return [URL.createObjectURL(file), file.type];
   }, [file]);
+  const [highlightedSubtitles, setHighlightedSubtitles] = useState<
+    Record<number, boolean>
+  >({});
+  const sections = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+    return data.map((section) => ({
+      ...section,
+      subtitles: section.subtitles.map((subtitle) => ({
+        ...subtitle,
+        isHighlighted: highlightedSubtitles[srtTimeToSeconds(subtitle.start)],
+      })),
+    }));
+  }, [data, highlightedSubtitles]);
+
+  const handleSelectSubtitle = (subtitle: ISubtitle) => {
+    const time = srtTimeToSeconds(subtitle.start);
+    setHighlightedSubtitles((prev) => {
+      const isHighlighted = prev[time];
+      if (isHighlighted) {
+        removeHighlight(time);
+      } else {
+        addHighlight(time, srtTimeToSeconds(subtitle.end), subtitle.text);
+      }
+      return {
+        ...prev,
+        [time]: !isHighlighted,
+      };
+    });
+  };
 
   useEffect(() => {
     if (file) {
@@ -40,13 +73,16 @@ export default function Home() {
   useEffect(() => {
     if (data) {
       clearHighlights();
+      const highlightedSubtitles: Record<number, boolean> = {};
       data.forEach((section) => {
         section.subtitles.forEach(({ start, end, text, isHighlighted }) => {
           if (isHighlighted) {
             addHighlight(srtTimeToSeconds(start), srtTimeToSeconds(end), text);
+            highlightedSubtitles[srtTimeToSeconds(start)] = true;
           }
         });
       });
+      setHighlightedSubtitles(highlightedSubtitles);
     }
   }, [data]);
 
@@ -64,9 +100,10 @@ export default function Home() {
           <div className="flex h-full *:w-1/2">
             <Subtitles
               current={current}
-              sections={data}
+              sections={sections}
               onJumpToSubtitle={handleJumpToSubtitle}
               onPause={pause}
+              onSelectSubtitle={handleSelectSubtitle}
             ></Subtitles>
             <div className="flex-1 sticky top-1/2 -translate-y-1/2 aspect-video h-fit">
               <VideoPlayer
@@ -80,7 +117,7 @@ export default function Home() {
           <Timeline
             current={current}
             duration={duration}
-            sections={data}
+            sections={sections}
             onJumpToSubtitle={handleJumpToSubtitle}
             className="h-20 fixed bottom-0 inset-x-0"
           />
