@@ -1,5 +1,67 @@
 # Video Highlight Tool - Frontend Homework Assignment
 
+- GitHub Repo: [GliaCloud Frontend Homework](https://github.com/yourusername/gliaclooud-frontend-homework)
+- Live Demo: [Live Demo](https://gliacloud-frontend-homework.vercel.app)
+
+### Demo
+
+![demo](./public/demo.gif)
+
+### Demo - RWD
+
+![demo-rwd](./public/demo-rwd.gif)
+
+## Technical Choices
+
+- Frontend Framework:
+  - Next.js
+  - **Server-Side Rendering (SSR)**: Next.js supports SSR out-of-the-box, which can improve performance and SEO
+  - **API Routes**: Next.js provides easy-to-use API routes that allow you to create mock APIs or actual backend functionality within the same project structure. This is great for prototyping and simplifying development without needing a separate backend service initially.
+  - **Automatic Code Splitting**: The framework automatically splits your code into smaller bundles, which can be loaded on demand, improving load times.
+  - **Built-in Routing**: Next.js includes file-based routing, making it simple to set up and manage routes within the application.
+- Styling:
+  - Tailwind CSS
+  - **Utility-First Approach**: Tailwind provides utility classes that can be applied directly in your HTML/JSX, promoting rapid styling without writing custom CSS.
+  - **Responsive Design**: It includes responsive variants for its utilities, making it easier to create designs that adapt seamlessly across different screen sizes (mobile and desktop).
+  - **Theming Customization**: Tailwind is highly customizable via the configuration file, allowing you to easily tweak colors, fonts, breakpoints, etc., to match your design requirements.
+- Data Fetching:
+  - SWR
+  - **Lightweight and Efficient**: SWR is a small library designed for data fetching with built-in caching, automatic revalidation, and request deduplication, leading to efficient network usage.
+- Video Player:
+  - Video.js
+  - **Cross-Platform Support**: Video.js is a versatile player that works across various platforms and devices, ensuring broad compatibility.
+
+## Folder Structure
+
+```
+src/
+├── app/
+│   ├── page.tsx
+│   ├── layout.tsx
+│   └── ...
+├── components/
+│   ├── Marker.ts: Video.js Component
+│   ├── Subtitles.tsx: display subtitles that can jump to custom timestamp and highlight sentences
+│   ├── Timeline.tsx: display highlights on timeline
+│   ├── VideoPlayer.tsx: video player integrated with video.js
+│   ├── VideoUpload.tsx: choose video files
+│   └── ...
+├── hooks/
+│   ├── use-video.ts: encapsulate video.js player logic
+│   └── ...
+├── data/
+│   ├── api.ts: fetchers for SWR
+│   └── ...
+├── utils/: collections of utility functions
+├── public/
+│   ├── preview.png
+│   └── ...
+├── next.config.mjs
+└── README.md
+```
+
+## Requirements
+
 - You should provide
 
   - Code on github
