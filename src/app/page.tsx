@@ -1,6 +1,6 @@
 "use client";
 
-import { Subtitles, VideoPlayer, VideoUpload } from "@/components";
+import { Subtitles, Timeline, VideoPlayer, VideoUpload } from "@/components";
 import { subtitlesFetcher } from "@/data";
 import useVideo from "@/hooks/use-video";
 import { srtTimeToSeconds } from "@/utils";
@@ -16,6 +16,7 @@ export default function Home() {
   });
   const {
     current,
+    duration,
     handlePlayerReady,
     handleJumpToSubtitle,
     handlePlayerSetup,
@@ -59,24 +60,31 @@ export default function Home() {
         ></VideoUpload>
       )}
       {videoSrc && videoType && (
-        <div className="flex h-full *:w-1/2">
-          {file && (
+        <>
+          <div className="flex h-full *:w-1/2">
             <Subtitles
               current={current}
               sections={data}
               onJumpToSubtitle={handleJumpToSubtitle}
               onPause={pause}
             ></Subtitles>
-          )}
-          <div className="flex-1 sticky top-1/2 -translate-y-1/2 aspect-video h-fit">
-            <VideoPlayer
-              src={videoSrc}
-              type={videoType}
-              onReady={handlePlayerReady}
-              onUpdate={handlePlayerSetup}
-            ></VideoPlayer>
+            <div className="flex-1 sticky top-1/2 -translate-y-1/2 aspect-video h-fit">
+              <VideoPlayer
+                src={videoSrc}
+                type={videoType}
+                onReady={handlePlayerReady}
+                onUpdate={handlePlayerSetup}
+              ></VideoPlayer>
+            </div>
           </div>
-        </div>
+          <Timeline
+            current={current}
+            duration={duration}
+            sections={data}
+            onJumpToSubtitle={handleJumpToSubtitle}
+            className="h-20 fixed bottom-0 inset-x-0"
+          />
+        </>
       )}
     </main>
   );

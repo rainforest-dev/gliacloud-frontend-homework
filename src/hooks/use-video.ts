@@ -9,6 +9,7 @@ videojs.registerComponent("Marker", Marker as ComponentType);
 export default function useVideo() {
   const [current, setCurrent] = useState<number>(0);
   const playerRef = useRef<PlayerType | null>(null);
+  const [duration, setDuration] = useState<number>(0);
 
   const handlePlayerReady = (player: PlayerType) => {
     playerRef.current = player;
@@ -31,6 +32,10 @@ export default function useVideo() {
       src: "/demo.vtt",
       srclang: "en",
       label: "English",
+    });
+
+    playerRef.current?.on("loadedmetadata", () => {
+      setDuration(playerRef.current?.duration() || 0);
     });
 
     playerRef.current?.on(
@@ -82,6 +87,7 @@ export default function useVideo() {
   return {
     playerRef,
     current,
+    duration,
     handlePlayerReady,
     handlePlayerSetup,
     handleJumpToSubtitle,
