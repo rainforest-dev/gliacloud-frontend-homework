@@ -10,7 +10,7 @@ import useSWR from "swr";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
-  const { data, mutate } = useSWR(file, subtitlesFetcher, {
+  const { data, mutate, isLoading } = useSWR(file, subtitlesFetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
@@ -105,6 +105,7 @@ export default function Home() {
             <Subtitles
               current={current}
               sections={sections}
+              isLoading={isLoading}
               onJumpToSubtitle={handleJumpToSubtitle}
               onPause={pause}
               onSelectSubtitle={handleSelectSubtitle}
@@ -124,6 +125,7 @@ export default function Home() {
               current={current}
               duration={duration}
               sections={sections}
+              isLoading={isLoading}
               onJumpToSubtitle={handleJumpToSubtitle}
               className="h-20 min-w-250"
             />

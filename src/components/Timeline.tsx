@@ -8,6 +8,7 @@ interface IProps {
   sections?: ISectionSubtitles[];
   current: number;
   duration: number;
+  isLoading?: boolean;
   onJumpToSubtitle: (time: number) => void;
 }
 
@@ -72,6 +73,7 @@ export default function Timeline({
   current,
   duration,
   onJumpToSubtitle,
+  isLoading,
   className,
 }: IProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -80,10 +82,13 @@ export default function Timeline({
     <div
       ref={ref}
       className={clsx(
-        className,
-        "w-full min-h-4 bg-background-higher shadow flex"
+        "w-full min-h-4 bg-background-higher shadow flex z-0 relative",
+        className
       )}
     >
+      {isLoading && (
+        <div className="absolute inset-0 bg-background animate-pulse z-10"></div>
+      )}
       {sections.map((section, sectionIndex) => {
         return (
           <div key={section.section} className="relative h-full group z-0 flex">

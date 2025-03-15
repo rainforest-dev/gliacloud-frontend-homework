@@ -6,6 +6,7 @@ import clsx from "clsx";
 interface IProps {
   current: number;
   sections?: ISectionSubtitles[];
+  isLoading?: boolean;
   onJumpToSubtitle: (time: number) => void;
   onPause?: () => void;
   onSelectSubtitle?: (subtitle: ISubtitle) => void;
@@ -67,6 +68,7 @@ const Subtitle = ({
 export default function Subtitles({
   current,
   sections = [],
+  isLoading,
   onJumpToSubtitle,
   onPause,
   onSelectSubtitle,
@@ -79,6 +81,24 @@ export default function Subtitles({
   const handleSubtitleClick = (subtitle: ISubtitle) => {
     onJumpToSubtitle(srtTimeToSeconds(subtitle.start));
   };
+
+  if (isLoading) {
+    return (
+      <div className={className}>
+        <h2 className="text-2xl h-[1lh] w-1/2 mb-4 mt-10 shadow rounded-lg bg-background-higher animate-pulse"></h2>
+        <ul className="flex flex-col gap-2">
+          {Array.from({ length: 20 }).map((_, index) => (
+            <div
+              key={index}
+              className="size-full px-4 py-2 shadow rounded-lg bg-background-higher animate-pulse"
+            >
+              <div className="h-[1lh] w-full"></div>
+            </div>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <div
