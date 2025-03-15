@@ -28,6 +28,7 @@ export default function VideoPlayer({ src, type, onReady, onUpdate }: IProps) {
           autoplay: true,
           preload: "auto",
           responsive: true,
+          playsinline: true,
           fill: true,
           sources: [
             {
