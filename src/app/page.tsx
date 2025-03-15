@@ -1,23 +1,28 @@
 "use client";
 
 import { Subtitles, Timeline, VideoPlayer, VideoUpload } from "@/components";
-import { subtitlesFetcher } from "@/data";
+import { analyzeFetcher, subtitlesFetcher } from "@/data";
 import useVideo from "@/hooks/use-video";
 import type { ISubtitle } from "@/types";
 import { srtTimeToSeconds } from "@/utils";
 import { useEffect, useMemo, useState } from "react";
-import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
-  const { data, mutate, isLoading } = useSWR(file, subtitlesFetcher, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    revalidateIfStale: false,
-  });
+  const { data: subtitlesUrl, trigger: mutateSubtitlesUrl } = useSWRMutation(
+    file,
+    subtitlesFetcher
+  );
+  const {
+    data,
+    trigger: analyzeVideo,
+    isMutating: isLoading,
+  } = useSWRMutation(file, analyzeFetcher);
   const {
     current,
     duration,
+    updateSubtitles,
     handlePlayerReady,
     handleJumpToSubtitle,
     handlePlayerSetup,
@@ -39,6 +44,7 @@ export default function Home() {
     if (!data) {
       return [];
     }
+    console.log(data);
     return data.map((section) => ({
       ...section,
       subtitles: section.subtitles.map((subtitle) => ({
@@ -66,9 +72,16 @@ export default function Home() {
 
   useEffect(() => {
     if (file) {
-      mutate();
+      mutateSubtitlesUrl();
+      analyzeVideo();
     }
-  }, [file, mutate]);
+  }, [analyzeVideo, file, mutateSubtitlesUrl]);
+
+  useEffect(() => {
+    if (subtitlesUrl) {
+      updateSubtitles(subtitlesUrl);
+    }
+  }, [subtitlesUrl]);
 
   useEffect(() => {
     if (data) {

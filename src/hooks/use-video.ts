@@ -27,13 +27,6 @@ export default function useVideo() {
   };
 
   const handlePlayerSetup = () => {
-    playerRef.current?.addRemoteTextTrack({
-      kind: "subtitles",
-      src: "/demo.vtt",
-      srclang: "en",
-      label: "English",
-    });
-
     playerRef.current?.on("loadedmetadata", () => {
       setDuration(playerRef.current?.duration() || 0);
     });
@@ -45,6 +38,20 @@ export default function useVideo() {
         setCurrent(time);
       })
     );
+  };
+
+  const updateSubtitles = (url: string) => {
+    if (playerRef.current) {
+      playerRef.current.addRemoteTextTrack(
+        {
+          kind: "subtitles",
+          src: url,
+          srclang: "en",
+          label: "English",
+        },
+        false
+      );
+    }
   };
 
   const handleJumpToSubtitle = (time: number) => {
@@ -102,6 +109,7 @@ export default function useVideo() {
     playerRef,
     current,
     duration,
+    updateSubtitles,
     handlePlayerReady,
     handlePlayerSetup,
     handleJumpToSubtitle,
