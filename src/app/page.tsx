@@ -121,7 +121,7 @@ export default function Home() {
   }, [data]);
 
   return (
-    <main className="lg:container mx-auto h-screen lg:h-full lg:pt-40 lg:pb-56">
+    <main className="lg:container mx-auto h-dvh lg:h-full lg:pt-40 lg:pb-56">
       {!file && (
         <VideoUpload
           onChange={setFile}
