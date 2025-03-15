@@ -44,7 +44,6 @@ export default function Home() {
     if (!data) {
       return [];
     }
-    console.log(data);
     return data.map((section) => ({
       ...section,
       subtitles: section.subtitles.map((subtitle) => ({
@@ -69,6 +68,28 @@ export default function Home() {
       };
     });
   };
+
+  useEffect(() => {
+    // check if screen larger than breakpoint lg use match media query
+    const media = window.matchMedia("(min-width: 1024px)");
+    const handleScrollEventsInLgScreen = (matches: boolean) => {
+      if (matches) {
+        window.addEventListener("wheel", pause);
+        window.addEventListener("touchmove", pause);
+      } else {
+        window.removeEventListener("wheel", pause);
+        window.removeEventListener("touchmove", pause);
+      }
+    };
+    media.addEventListener("change", (e) => {
+      handleScrollEventsInLgScreen(e.matches);
+    });
+    handleScrollEventsInLgScreen(media.matches);
+    return () => {
+      window.removeEventListener("wheel", pause);
+      window.removeEventListener("touchmove", pause);
+    };
+  }, []);
 
   useEffect(() => {
     if (file) {
@@ -140,7 +161,7 @@ export default function Home() {
               sections={sections}
               isLoading={isLoading}
               onJumpToSubtitle={handleJumpToSubtitle}
-              className="h-20 min-w-250"
+              className="h-10 lg:h-20 min-w-250"
             />
           </div>
         </>

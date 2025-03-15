@@ -104,6 +104,7 @@ export default function Subtitles({
     <div
       className={clsx("flex flex-col w-full", className)}
       onWheel={handleScroll}
+      onTouchMove={handleScroll}
     >
       {sections.map(({ section, subtitles }) => (
         <section key={section} className="flex flex-col">
