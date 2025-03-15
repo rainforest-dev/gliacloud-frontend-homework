@@ -1,6 +1,7 @@
 import { formatTime, srtTimeToSeconds } from "@/utils";
 import type { ISectionSubtitles, ISubtitle } from "@/types";
 import { useEffect, useRef } from "react";
+import clsx from "clsx";
 
 interface IProps {
   current: number;
@@ -8,6 +9,7 @@ interface IProps {
   onJumpToSubtitle: (time: number) => void;
   onPause?: () => void;
   onSelectSubtitle?: (subtitle: ISubtitle) => void;
+  className?: string;
 }
 
 const Subtitle = ({
@@ -68,6 +70,7 @@ export default function Subtitles({
   onJumpToSubtitle,
   onPause,
   onSelectSubtitle,
+  className,
 }: IProps) {
   const handleScroll = () => {
     onPause?.();
@@ -78,7 +81,10 @@ export default function Subtitles({
   };
 
   return (
-    <div className="flex flex-col px-10" onWheel={handleScroll}>
+    <div
+      className={clsx("flex flex-col w-full", className)}
+      onWheel={handleScroll}
+    >
       {sections.map(({ section, subtitles }) => (
         <section key={section} className="flex flex-col">
           <h2 className="pb-4 pt-10 text-2xl font-bold capitalize sticky top-0 bg-gradient-to-b from-background via-background/80 to-transparent">
