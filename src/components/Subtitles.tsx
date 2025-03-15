@@ -43,7 +43,7 @@ const Subtitle = ({
       ref={ref}
       className="bg-background-higher rounded-lg text-foreground shadow flex
                 data-[highlighted=true]:bg-primary data-[highlighted=true]:text-on-primary
-                data-[current=true]:outline-2 data-[current=true]:outline-offset-1 data-[current=true]:outline-rose-500"
+                data-[current=true]:outline-2 data-[current=true]:outline-offset-1 data-[current=true]:outline-secondary"
       data-highlighted={subtitle.isHighlighted}
       data-current={isCurrent}
     >

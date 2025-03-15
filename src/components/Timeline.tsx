@@ -55,7 +55,7 @@ export const Block = ({
         key={startTime}
         className="h-full cursor-pointer hover:border hover:scale-110
               data-[highlighted=true]:bg-primary data-[highlighted=true]:text-on-primary 
-              data-[current=true]:outline-2 data-[current=true]:outline-red-500 data-[current=true]:outline-offset-1"
+              data-[current=true]:outline-2 data-[current=true]:outline-secondary data-[current=true]:outline-offset-1"
         style={{
           width: `${width}px`,
         }}
