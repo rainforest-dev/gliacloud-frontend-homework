@@ -60,6 +60,13 @@ src/
 └── README.md
 ```
 
+### API Mocks
+
+1. `/api/video/subtitles`: Analyzes the video and returns subtitles with timestamps in remote VTT url.
+2. `/api/video/analyze`: Analyze the VTT file and returns sections with subtitles that are highlighted.
+
+These APIs can easily integrate with real AI services like OpenAI or Google Cloud for real-time analysis in the future.
+
 ## Requirements
 
 - You should provide
